@@ -1,21 +1,26 @@
 # Program 1 Binary Decoder
+DEBUG=False
 
-# This contains some methods to convert between binary and ascii
-import binascii
-# Example from geeksforgeeks.org (we do not need to use exactly this, just might be a good starting point)
 
-# Initializing a binary string in the form of
-# 0 and 1, with base of 2
-binary_int = int("11000010110001001100011", 2);
- 
-# Getting the byte number
-byte_number = binary_int.bit_length() + 7 // 8
- 
-# Getting an array of bytes
-binary_array = binary_int.to_bytes(byte_number, "big")
- 
-# Converting the array into ASCII text
-ascii_text = binary_array.decode()
- 
-# Getting the ASCII value
-print(ascii_text)
+inp = input()
+if (len(inp) % 7 == 0):
+    bitLength = 7
+elif (len(inp) % 8 == 0):
+    bitLength = 8
+else:
+    bitLength = 9
+
+#force bitlength if known value
+forcebitLength = False
+if (forcebitLength == True):
+    bitLength = 7
+
+strBinOut = [inp[i:i+bitLength] for i in range(0, len(inp), bitLength)] # I found the idea for this line on stackoverflow
+binOut = [int(strBinOut[i], 2) for i in range(0, len(strBinOut))]
+output = ''.join(chr(binOut[i]) for i in range(0, len(binOut)))
+print(output)
+
+if DEBUG:
+    print(f"Input: {inp}")
+    print(f"Split binary output: {binOut}")
+    print(f"Output: {output}")
