@@ -22,5 +22,5 @@ print(output)
 
 if DEBUG:
     print(f"Input: {inp}")
-    print(f"Split binary output: {binOut}")
+    print(f"Split binary output: {strBinOut}")
     print(f"Output: {output}")
