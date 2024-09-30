@@ -1,0 +1,2 @@
+# FTP (storage) covert channel
+
