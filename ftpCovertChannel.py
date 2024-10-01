@@ -10,31 +10,6 @@ USE_PASSIVE = True # set this to False if the connection times out
 DEBUG = False
 METHOD = "7-bit" # Either "7-bit" or "10-bit"
 
-def binDecode(inp):
-  inp = input()
-  if (len(inp) % 7 == 0):
-      bitLength = 7
-  elif (len(inp) % 8 == 0):
-      bitLength = 8
-  else:
-      bitLength = 9
-
-  #force bitlength if known value
-  forcebitLength = False
-  if (forcebitLength == True):
-      bitLength = 7
-
-  strBinOut = [inp[i:i+bitLength] for i in range(0, len(inp), bitLength)] # I found the idea for this line on stackoverflow
-  binOut = [int(strBinOut[i], 2) for i in range(0, len(strBinOut))]
-  output = ''.join(chr(binOut[i]) for i in range(0, len(binOut)))
-  return output
-
-  if DEBUG:
-      print(f"Input: {inp}")
-      print(f"Split binary output: {strBinOut}")
-      print(f"Output: {output}")
-
-
 def get_file_permissions(ftp):
     permissions = []
     ftp.retrlines('LIST', permissions.append) # found on GeeksForGeeks.org
@@ -72,12 +47,17 @@ def main():
     ftp.cwd(FOLDER)
 
     # Get file permissions
+    if (DEBUG):
+        print("Getting file permissions...")
+
     permissions = get_file_permissions(ftp)
 
     # Exit the ftp server
     ftp.quit()
 
     # Decrypt the message in the permissions
+    if (DEBUG):
+        print("Decrypting permissions...")
     covert_message = decrypt_permissions(permissions, METHOD)
 
     # Display the message
