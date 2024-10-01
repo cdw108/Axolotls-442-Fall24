@@ -5,9 +5,9 @@ IP = "localhost"
 PORT = 21
 USER = "anonymous"
 PASSWORD = ""
-FOLDER = "/"
+FOLDER = "/7/"
 USE_PASSIVE = True # set this to False if the connection times out
-DEBUG = False
+DEBUG = True
 METHOD = "7-bit" # Either "7-bit" or "10-bit"
 
 def get_file_permissions(ftp):
@@ -20,14 +20,19 @@ def decrypt_permissions(permissions, method):
     for line in permissions:
         # get 10 permission bits per file
         permission_bits = line[:10] 
+        # convert permission bits to binary string
+        binary_string = ''.join(['0' if char == '-' else '1' for char in permission_bits])
+        if DEBUG:
+            print(f"Permission: {permission_bits}, Binary: {binary_string}")
+
         if method == "7-bit":
             # check to make sure first 3 permission bits are empty
-            if permission_bits[:3] == "---":
+            if binary_string[:3] == "000":
                 # use all 7 bits after the first 3 (base 2 -> string)
-                covert_message += chr(int(permission_bits[3:], 2))
+                covert_message += chr(int(binary_string[3:], 2))
         elif method == "10-bit":
             # use all 10 bits
-            covert_message += chr(int(permission_bits, 2))
+            covert_message += chr(int(binary_string, 2))
     return covert_message
 
 
