@@ -8,6 +8,7 @@ PASSWORD = ""
 FOLDER = "/"
 USE_PASSIVE = True # set this to False if the connection times out
 DEBUG = False
+METHOD = "7-bit" # Either "7-bit" or "10-bit"
 
 def binDecode(inp):
   inp = input()
@@ -34,23 +35,53 @@ def binDecode(inp):
       print(f"Output: {output}")
 
 
-# main
-ftp = FTP()
-ftp.connect(IP, PORT)
-ftp.login(USER, PASSWORD)
-ftp.set_pasv(USE_PASSIVE)
+def get_file_permissions(ftp):
+    permissions = []
+    ftp.retrlines('LIST', permissions.append) # found on GeeksForGeeks.org
+    return permissions
 
-if (DEBUG):
-    print("Logged in.")
-    print("Navigating...")
+def decrypt_permissions(permissions, method):
+    covert_message = ""
+    for line in permissions:
+        # get 10 permission bits per file
+        permission_bits = line[:10] 
+        if method == "7-bit":
+            # check to make sure first 3 permission bits are empty
+            if permission_bits[:3] == "---":
+                # use all 7 bits after the first 3 (base 2 -> string)
+                covert_message += chr(int(permission_bits[3:], 2))
+        elif method == "10-bit":
+            # use all 10 bits
+            covert_message += chr(int(permission_bits, 2))
+    return covert_message
 
-ftp.cwd(FOLDER)
-files = []
-ftp.dir(files.append)
 
-#exit the ftp server
-ftp.quit()
+def main():
+    # Connect to FTP server
+    ftp = FTP()
+    ftp.connect(IP, PORT)
+    ftp.login(USER, PASSWORD)
 
-#display the server contents
-for f in files:
-    print(f)
+    ftp.set_pasv(USE_PASSIVE)
+
+    if (DEBUG):
+        print("Logged in.")
+        print("Navigating...")
+
+    # Navigate to specified directory
+    ftp.cwd(FOLDER)
+
+    # Get file permissions
+    permissions = get_file_permissions(ftp)
+
+    # Exit the ftp server
+    ftp.quit()
+
+    # Decrypt the message in the permissions
+    covert_message = decrypt_permissions(permissions, METHOD)
+
+    # Display the message
+    print(covert_message)
+
+if __name__ == '__main__':
+    main()
