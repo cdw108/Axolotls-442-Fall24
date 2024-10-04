@@ -1,24 +1,22 @@
 from ftplib import FTP
 
-METHOD = "10"
+METHOD = "7"
 
 # some ftp details
-#IP = "localhost"
-IP = "138.47.99.158"
+IP = "localhost"
+# IP = "127.0.0.1"
 PORT = 21
-#USER = "anonymous"
-USER = "jonastaylor"
-#PASSWORD = ""
-PASSWORD = "megalodon"
+USER = "anonymous"
+PASSWORD = ""
 if METHOD == "7":
-    FOLDER = "files/7"
+    FOLDER = "/7"
 elif METHOD == "10":
-    FOLDER = "files/10"
+    FOLDER = "/10"
 else:
     print("That method does not exist")
     exit()
 USE_PASSIVE = True # set this to False if the connection times out
-DEBUG = True
+DEBUG = False
 
 # main
 if (DEBUG):
@@ -54,7 +52,7 @@ if METHOD == "7":
                     encodedList7.append("0")
                 else:
                     encodedList7.append("1")
-        
+            
     encodedString7 = "".join(encodedList7)
     chunks7 = []
     for i in range(0, len(encodedString7), 7):
