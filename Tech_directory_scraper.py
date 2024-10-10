@@ -1,3 +1,5 @@
+import re
+import csv
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,12 +16,12 @@ webpages = ['https://www.latech.edu/faculty-staff/single-entry/cat/administratio
             'https://www.latech.edu/faculty-staff/single-entry/cat/research-partnerships/',
             'https://www.latech.edu/faculty-staff/single-entry/cat/student_advancement/',
             'https://www.latech.edu/faculty-staff/single-entry/cat/university_advancement/']
-
+staff_list = []
+data_list = []
 #loop through untill the entire directory has been scraped
 for i in range(len(webpages)-1):
     print(webpages[i])
-    staff_list = []
-    data_list = []
+    
 
 #sructure for beautiful soup requests found from: https://www.youtube.com/watch?v=JlHdv4Dfjq4, and adapted to the tech directory website
     current_webpage = requests.get(webpages[i])
@@ -34,8 +36,25 @@ for i in range(len(webpages)-1):
     data = s.find_all('div', class_= 'listing-right')
     for element in data:
         data_list.append(element.find('p').get_text())
-      
-    for i in range(len(data_list)):
-        print(staff_list[i], data_list[i])
+
+###CHAT GPT GENERATED (partially)###
+email_pattern = re.compile(r"Email:\s*([^\s]+?(\.com|\.edu|\.org))")
+
+# Open a CSV file for writing
+with open("emails.csv", mode='w', newline='') as file:
+    writer = csv.writer(file)
+    
+    # Write header
+    writer.writerow(["Name", "Email"])
+
+    # Extract emails from each string and write them into the CSV
+    for idx, (entry, name) in enumerate(zip(data_list, staff_list)):
+        match = email_pattern.search(entry)
+        if match:
+            email = match.group(1)
+            writer.writerow([name, email])  # Write email to the CSV
+print('done')
+###CHAT GPT GENERATED (partially)###
+#prompt: how to seach through a list of strings and collect data after entry: "Email: "
 
 
