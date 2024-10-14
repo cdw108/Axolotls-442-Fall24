@@ -8,7 +8,7 @@ SHORT_THRESHOLD = 0.5  # Delays shorter than this will be binary '0'
 LONG_THRESHOLD = 1.0   # Delays longer than this will be binary '1'
 TIMEOUT = 10.0         # Timeout for the socket connection
 
-EXPECTED_BINARY_LENGTH = 56  # We expect 56 bits (7 characters * 8 bits)
+EXPECTED_BINARY_LENGTH = 64 # We expect 56 bits (7 characters * 8 bits)
 
 def chat_client():
     server_address = (SERVER_IP, SERVER_PORT)
