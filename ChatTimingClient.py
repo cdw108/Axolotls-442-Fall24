@@ -47,7 +47,7 @@ def chat_client():
                 print(f"Timing: {delay:.3f}s -> Interpreted as binary '1'")
 
             # Stop when the overt message ends
-            if overt_message.endswith("."):
+            if overt_message.endswith("EOF"):
                 print("\nOvert message completed.")
                 break
 
