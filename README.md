@@ -4,3 +4,4 @@
 # Jack Nichols
 # Kiefer Armand
 # Jacob Yee
+# Alex Easterling
