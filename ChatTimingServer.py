@@ -19,7 +19,7 @@ def chat_server():
     print(f"Connected to {addr}")
 
     # Overt message to send to the client
-    overt_message = "The garden blooms brightly in spring, a colorful sight to see  ."
+    overt_message = "The garden blooms brightly in spring, a colorful sight to seeEOF"
     
     # Covert binary message (e.g., binary for "I am low")
     covert_binary = "0100100100100000011000010110110100100000011011000110111101110111"
