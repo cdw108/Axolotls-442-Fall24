@@ -28,12 +28,14 @@ def chat_server():
 
     # Send each character of the overt message with timing delays based on covert binary
     for i, char in enumerate(overt_message):
-        conn.send(char.encode('utf-8'))  # Send one character at a time
+        # Send one character at a time with conn.send
         if i < len(covert_binary) and covert_binary[i] == '0':
             time.sleep(SHORT_DELAY)  # Send short delay for binary '0'
+            conn.send(char.encode('utf-8'))
             print(f"Sent char '{char}' with short delay ({SHORT_DELAY} seconds) for binary '0'")
         else:
             time.sleep(LONG_DELAY)  # Send long delay for binary '1'
+            conn.send(char.encode('utf-8'))
             print(f"Sent char '{char}' with long delay ({LONG_DELAY} seconds) for binary '1'")
 
     print("Overt message sent. Waiting to send additional timing data...")
