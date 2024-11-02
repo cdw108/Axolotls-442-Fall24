@@ -10,18 +10,18 @@ import re
 def main():
     # Check if a file path is provided as an argument
     if len(sys.argv) < 2:
-        print("Usage: python script.py <file_path>")
-        return
+        date_input = sys.stdin.read().strip()
+        #print("Usage: python script.py <file_path>")
+    else:
+        file_path = sys.argv[1]
 
-    file_path = sys.argv[1]
-
-    # Read the content of the file
-    try:
-        with open(file_path, 'r') as file:
-            date_input = file.read().strip()  # Strip to remove any extra whitespace or newline
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-        return
+        # Read the content of the file
+        try:
+            with open(file_path, 'r') as file:
+                date_input = file.read().strip()  # Strip to remove any extra whitespace or newline
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+            return
 
     #print(f"Date input received from file: {date_input}")  # Debug
 
@@ -37,7 +37,7 @@ def main():
     # Localize epoch and current time to the same timezone to account for DST
     timezone = pytz.timezone('America/New_York')
     epoch = timezone.localize(epoch)
-    current_time = timezone.localize(datetime.now())
+    current_time = timezone.localize(datetime(2017, 4, 26, 15, 14, 30))# timezone.localize(datetime.now())
     #print(f"Current time: {current_time}")  # Debug
 
     # Calculate time elapsed since epoch in seconds and round down to the nearest 60-second interval
@@ -55,8 +55,8 @@ def main():
     first_two_letters = ''.join(letters[:2]) if len(letters) >= 2 else ""
 
     # Extract first two digits [0-9] from right-to-left
-    digits = re.findall(r'\d', compound_hash[::-1])
-    first_two_digits_reversed = ''.join(digits[:2][::-1]) if len(digits) >= 2 else ""
+    digits = re.findall(r'\d', compound_hash)
+    first_two_digits_reversed = ''.join(digits[::-1][:2]) if len(digits) >= 2 else ""
 
     # Concatenate the extracted characters to form the final code
     result_code = first_two_letters + first_two_digits_reversed
